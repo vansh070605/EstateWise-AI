@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import joblib
 import numpy as np
+import os
 
-app = Flask(__name__)
+# Configure app to serve static frontend
+app = Flask(__name__, static_folder='../client', static_url_path='')
 CORS(app)
 
 import os
@@ -17,6 +19,10 @@ model_simple = joblib.load(os.path.join(MODELS_DIR, 'model_simple.joblib'))
 town_model_data = joblib.load(os.path.join(MODELS_DIR, 'model_town.joblib'))
 model_town = town_model_data['model']
 town_columns = town_model_data['columns']
+
+@app.route('/')
+def index():
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/predict_simple', methods=['POST'])
 def predict_simple():
