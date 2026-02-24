@@ -1,10 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import joblib
 import numpy as np
 import os
 
-app = Flask(__name__)
+# Serve static files from the 'static' folder inside 'api'
+app = Flask(__name__, static_folder='static', static_url_path='')
 CORS(app)
 
 # Compute paths relative to this file
@@ -16,6 +17,10 @@ model_simple = joblib.load(os.path.join(MODELS_DIR, 'model_simple.joblib'))
 town_model_data = joblib.load(os.path.join(MODELS_DIR, 'model_town.joblib'))
 model_town = town_model_data['model']
 town_columns = town_model_data['columns']
+
+@app.route('/')
+def home():
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/api/predict_simple', methods=['POST'])
 def predict_simple():
@@ -50,5 +55,7 @@ def predict_town():
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
-# Vercel requires the app object to be exported
-# No app.run() here
+# Catch-all to serve static files (CSS, JS, Assets)
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_from_directory(app.static_folder, path)
