@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EstateWise AI | Premium Property Intelligence</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Estate<span>Wise</span> AI</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showView('welcome')">Home</a></li>
+                <li><a href="#" onclick="showView('selection')">Services</a></li>
+                <li>
+                    <select id="currency-selector" onchange="changeCurrency()" class="currency-nav-select">
+                        <option value="USD">USD ($)</option>
+                        <option value="INR">INR (₹)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="GBP">GBP (£)</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Welcome View -->
+    <section id="welcome-view" class="view active">
+        <div class="hero-content">
+            <span class="badge">Artificial Intelligence for Real Estate</span>
+            <h1>Discover the True Value of Your Future Home</h1>
+            <p>Our machine learning algorithms analyze thousands of data points to provide hyper-accurate property
+                valuations in seconds.</p>
+            <div class="hero-btns">
+                <button class="primary-btn" onclick="showView('selection')">Start Estimating <i
+                        class="fas fa-arrow-right"></i></button>
+                <button class="secondary-btn">Learn More</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <h3>98%</h3>
+                    <p>Accuracy Rate</p>
+                </div>
+                <div class="stat">
+                    <h3>15k+</h3>
+                    <p>Homes Analyzed</p>
+                </div>
+                <div class="stat">
+                    <h3>3</h3>
+                    <p>ML Models</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Selection View -->
+    <section id="selection-view" class="view">
+        <div class="section-header">
+            <h2>Select Your Analysis Type</h2>
+            <p>Choose the model that best fits your property valuation needs.</p>
+        </div>
+        <div class="selection-grid">
+            <div class="select-card" onclick="showView('general')">
+                <div class="icon-box"><i class="fas fa-home"></i></div>
+                <h3>General Estimator</h3>
+                <p>Perfect for quick valuations based on house specific metrics like area, bedrooms, and age.</p>
+                <span class="link">Get Started <i class="fas fa-chevron-right"></i></span>
+            </div>
+            <div class="select-card" onclick="showView('town')">
+                <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                <h3>Regional Estimator</h3>
+                <p>Location-aware model optimized for specific townships with varying market trends.</p>
+                <span class="link">Get Started <i class="fas fa-chevron-right"></i></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- General Estimator View -->
+    <section id="general-view" class="view">
+        <div class="form-container">
+            <button class="back-link" onclick="showView('selection')"><i class="fas fa-chevron-left"></i> Back</button>
+            <h2>General Property Analysis</h2>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Total Living Area (sq ft)</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                        <input type="number" id="gen-area" placeholder="Enter area...">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Number of Bedrooms</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-bed"></i>
+                        <input type="number" id="gen-bed" placeholder="Total bedrooms...">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Property Age (Years)</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="number" id="gen-age" placeholder="Age of house...">
+                    </div>
+                </div>
+            </div>
+            <button class="predict-btn" onclick="predict('simple')">Generate Analysis</button>
+        </div>
+    </section>
+
+    <!-- Town Estimator View -->
+    <section id="town-view" class="view">
+        <div class="form-container">
+            <button class="back-link" onclick="showView('selection')"><i class="fas fa-chevron-left"></i> Back</button>
+            <h2>Regional Market Analysis</h2>
+            <div class="form-grid">
+                <div class="input-group full">
+                    <label>Total Living Area (sq ft)</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                        <input type="number" id="town-area" placeholder="Enter area...">
+                    </div>
+                </div>
+                <div class="input-group full">
+                    <label>Select Your Township</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-city"></i>
+                        <select id="town-name">
+                            <option value="monroe township">Monroe Township</option>
+                            <option value="robbinsville">Robbinsville</option>
+                            <option value="west windsor">West Windsor</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button class="predict-btn" onclick="predict('town')">Calculate Regional Value</button>
+        </div>
+    </section>
+
+    <!-- Prediction View -->
+    <section id="prediction-view" class="view">
+        <div class="result-card">
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h2>Analysis Complete</h2>
+            <p id="result-text">Based on our machine learning analysis, your property valuation is:</p>
+            <div class="price-display" id="predicted-price">$ --</div>
+            <div class="result-breakdown">
+                <div class="detail-row">
+                    <span>Model Confidence</span>
+                    <span class="value">High (97.4%)</span>
+                </div>
+                <div class="detail-row">
+                    <span>Processing Time</span>
+                    <span class="value">14ms</span>
+                </div>
+            </div>
+            <button class="primary-btn" onclick="showView('selection')">New Calculation</button>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 EstateWise AI Intelligence. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
