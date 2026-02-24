@@ -8,7 +8,7 @@ import os
 def train_and_save_models():
     # Compute base directory
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    DATA_DIR = os.path.join(BASE_DIR, '..', 'data')
+    DATA_DIR = os.path.join(BASE_DIR, 'data')
     MODELS_DIR = os.path.join(BASE_DIR, 'models')
     
     # Create models directory if it doesn't exist

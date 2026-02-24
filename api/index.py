@@ -1,14 +1,11 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 import numpy as np
 import os
 
-# Configure app to serve static frontend
-app = Flask(__name__, static_folder='../client', static_url_path='')
+app = Flask(__name__)
 CORS(app)
-
-import os
 
 # Compute paths relative to this file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -20,11 +17,7 @@ town_model_data = joblib.load(os.path.join(MODELS_DIR, 'model_town.joblib'))
 model_town = town_model_data['model']
 town_columns = town_model_data['columns']
 
-@app.route('/')
-def index():
-    return send_from_directory(app.static_folder, 'index.html')
-
-@app.route('/predict_simple', methods=['POST'])
+@app.route('/api/predict_simple', methods=['POST'])
 def predict_simple():
     try:
         data = request.get_json()
@@ -37,7 +30,7 @@ def predict_simple():
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
-@app.route('/predict_town', methods=['POST'])
+@app.route('/api/predict_town', methods=['POST'])
 def predict_town():
     try:
         data = request.get_json()
@@ -45,9 +38,8 @@ def predict_town():
         town = data['town']
         
         # Prepare input features
-        # town_columns looks like ['area', 'monroe township', 'robbinsville']
         input_data = [area]
-        for col in town_columns[1:]: # Skip 'area'
+        for col in town_columns[1:]: 
             if col == town:
                 input_data.append(1)
             else:
@@ -58,5 +50,5 @@ def predict_town():
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+# Vercel requires the app object to be exported
+# No app.run() here
